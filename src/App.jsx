@@ -13,6 +13,35 @@ import axios from "axios";
 
 function App() {
   const [result, setResult] = useState(false);
+  const [resultSuma, setResultSuma] = useState(false);
+  const [resultResta, setResultResta] = useState(false);
+  const [resultMultiplicacion, setResultMultiplicacion] = useState(false);
+  const [resultDivision, setResultDivision] = useState(false);
+
+  function getAddResult(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const addResult = xmlDoc.getElementsByTagName("AddResult")[0].childNodes[0].nodeValue;
+    return parseInt(addResult);
+  }
+  function getSubstractResult(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const addResult = xmlDoc.getElementsByTagName("SubstractResult")[0].childNodes[0].nodeValue;
+    return parseInt(addResult);
+  }
+  function getMultiplyResult(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const addResult = xmlDoc.getElementsByTagName("MultiplyResult")[0].childNodes[0].nodeValue;
+    return parseInt(addResult);
+  }
+  function getDivideResult(xmlString) {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
+    const addResult = xmlDoc.getElementsByTagName("DivideResult")[0].childNodes[0].nodeValue;
+    return parseFloat(addResult);
+  }
 
   const suma = () => {
     const primerNumero = document.getElementById("primerNumeroSuma").value;
@@ -28,13 +57,6 @@ function App() {
         </soap:Body>
       </soap:Envelope>
       `;
-
-    const config = {
-      headers: {
-        "Content-Type": "text/xml",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
 
     axios
       .post(
@@ -54,6 +76,7 @@ function App() {
         console.log(response);
         console.log(response.data);
         setResult(response.data);
+        setResultSuma(getAddResult(response.data))
       });
   };
   const resta = () => {
@@ -71,13 +94,6 @@ function App() {
       </soap:Envelope>
       `;
 
-    const config = {
-      headers: {
-        "Content-Type": "text/xml",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-
     axios
       .post(
         "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
@@ -96,6 +112,7 @@ function App() {
         console.log(response);
         console.log(response.data);
         setResult(response.data);
+        setResultResta(getSubstractResult(response.data))
       });
   };
   const multiplicacion = () => {
@@ -113,13 +130,6 @@ function App() {
       </soap:Envelope>
       `;
 
-    const config = {
-      headers: {
-        "Content-Type": "text/xml",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-
     axios
       .post(
         "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
@@ -138,6 +148,7 @@ function App() {
         console.log(response);
         console.log(response.data);
         setResult(response.data);
+        setResultMultiplicacion(getMultiplyResult(response.data))
       });
   };
   const division = () => {
@@ -155,13 +166,6 @@ function App() {
       </soap:Envelope>
       `;
 
-    const config = {
-      headers: {
-        "Content-Type": "text/xml",
-        "Access-Control-Allow-Origin": "*",
-      },
-    };
-
     axios
       .post(
         "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
@@ -180,6 +184,7 @@ function App() {
         console.log(response);
         console.log(response.data);
         setResult(response.data);
+        setResultDivision(getDivideResult(response.data))
       });
   };
   return (
@@ -195,7 +200,7 @@ function App() {
                         <Alert variant="success">
                           Última consulta:
                           <br />
-                          El resultado es {result}
+                          {result}
                         </Alert>
                       </>
                     ) : (
@@ -231,6 +236,16 @@ function App() {
                         Calcular
                       </Button>
                     </Form>
+                    {resultSuma !== false ? (
+                      <>
+                      <br />
+                        <Alert variant="success">
+                          El resultado es {resultSuma}
+                        </Alert>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="1">
@@ -262,6 +277,16 @@ function App() {
                         Calcular
                       </Button>
                     </Form>
+                    {resultResta !== false ? (
+                      <>
+                      <br />
+                        <Alert variant="success">
+                          El resultado es {resultResta}
+                        </Alert>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="2">
@@ -293,6 +318,16 @@ function App() {
                         Calcular
                       </Button>
                     </Form>
+                    {resultMultiplicacion !== false ? (
+                      <>
+                      <br />
+                        <Alert variant="success">
+                          El resultado es {resultMultiplicacion}
+                        </Alert>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Accordion.Body>
                 </Accordion.Item>
                 <Accordion.Item eventKey="3">
@@ -324,6 +359,16 @@ function App() {
                         Calcular
                       </Button>
                     </Form>
+                    {resultDivision !== false ? (
+                      <>
+                      <br />
+                        <Alert variant="success">
+                          El resultado es {resultDivision}
+                        </Alert>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </Accordion.Body>
                 </Accordion.Item>
               </Accordion>
