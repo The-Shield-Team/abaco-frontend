@@ -47,28 +47,23 @@ function App() {
     const primerNumero = document.getElementById("primerNumeroSuma").value;
     const segundoNumero = document.getElementById("segundoNumeroSuma").value;
 
-    const xmlData = `
-      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <Add xmlns="http://abaco.org/">
-            <a>${primerNumero}</a>
-            <b>${segundoNumero}</b>
-          </Add>
-        </soap:Body>
-      </soap:Envelope>
-      `;
+    const bodyData = {
+      numero1: primerNumero,
+      numero2: segundoNumero
+    }
 
     axios
       .post(
-        "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
-        xmlData,
+        "http://localhost:3250/suma",
+        bodyData,
         {
           headers: {
-            "Content-Type": "text/xml",
+            "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
             "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type",
             Allow: "GET, HEAD, OPTIONS, TRACE",
+            mode: "no-cors"
           },
         }
       )
@@ -76,7 +71,7 @@ function App() {
         console.log(response);
         console.log(response.data);
         setResult(response.data);
-        setResultSuma(getAddResult(response.data))
+        setResultSuma(response.data)
       });
   };
   const resta = () => {
