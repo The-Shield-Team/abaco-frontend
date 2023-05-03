@@ -18,169 +18,95 @@ function App() {
   const [resultMultiplicacion, setResultMultiplicacion] = useState(false);
   const [resultDivision, setResultDivision] = useState(false);
 
-  function getAddResult(xmlString) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const addResult = xmlDoc.getElementsByTagName("AddResult")[0].childNodes[0].nodeValue;
-    return parseInt(addResult);
-  }
-  function getSubstractResult(xmlString) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const addResult = xmlDoc.getElementsByTagName("SubstractResult")[0].childNodes[0].nodeValue;
-    return parseInt(addResult);
-  }
-  function getMultiplyResult(xmlString) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const addResult = xmlDoc.getElementsByTagName("MultiplyResult")[0].childNodes[0].nodeValue;
-    return parseInt(addResult);
-  }
-  function getDivideResult(xmlString) {
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, "text/xml");
-    const addResult = xmlDoc.getElementsByTagName("DivideResult")[0].childNodes[0].nodeValue;
-    return parseFloat(addResult);
-  }
-
   const suma = () => {
     const primerNumero = document.getElementById("primerNumeroSuma").value;
     const segundoNumero = document.getElementById("segundoNumeroSuma").value;
 
     const bodyData = {
-      numero1: primerNumero,
-      numero2: segundoNumero
-    }
+      numero1: parseInt(primerNumero),
+      numero2: parseInt(segundoNumero),
+    };
 
     axios
-      .post(
-        "http://localhost:3250/suma",
-        bodyData,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-            Allow: "GET, HEAD, OPTIONS, TRACE",
-            mode: "no-cors"
-          },
-        }
-      )
+      .post("http://localhost:3250/suma", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
-        setResult(response.data);
-        setResultSuma(response.data)
+        setResult(response.data.resultado);
+        setResultSuma(response.data.resultado);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   };
+  
   const resta = () => {
     const primerNumero = document.getElementById("primerNumeroResta").value;
     const segundoNumero = document.getElementById("segundoNumeroResta").value;
 
-    const xmlData = `
-      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <Substract xmlns="http://abaco.org/">
-            <a>${primerNumero}</a>
-            <b>${segundoNumero}</b>
-          </Substract>
-        </soap:Body>
-      </soap:Envelope>
-      `;
+    const bodyData = {
+      numero1: parseInt(primerNumero),
+      numero2: parseInt(segundoNumero),
+    };
 
     axios
-      .post(
-        "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
-        xmlData,
-        {
-          headers: {
-            "Content-Type": "text/xml",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-            Allow: "GET, HEAD, OPTIONS, TRACE",
-          },
-        }
-      )
+      .post("http://localhost:3250/resta", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
-        setResult(response.data);
-        setResultResta(getSubstractResult(response.data))
+        setResult(response.data.resultado);
+        setResultResta(response.data.resultado);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   };
-  const multiplicacion = () => {
-    const primerNumero = document.getElementById("primerNumeroMultiplicacion").value;
-    const segundoNumero = document.getElementById("segundoNumeroMultiplicacion").value;
 
-    const xmlData = `
-      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <Multiply xmlns="http://abaco.org/">
-            <a>${primerNumero}</a>
-            <b>${segundoNumero}</b>
-          </Multiply>
-        </soap:Body>
-      </soap:Envelope>
-      `;
+  const multiplicacion = () => {
+    const primerNumero = document.getElementById("primerNumeroMultiplicacion")
+      .value;
+    const segundoNumero = document.getElementById("segundoNumeroMultiplicacion")
+      .value;
+
+    const bodyData = {
+      numero1: parseInt(primerNumero),
+      numero2: parseInt(segundoNumero),
+    };
 
     axios
-      .post(
-        "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
-        xmlData,
-        {
-          headers: {
-            "Content-Type": "text/xml",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-            Allow: "GET, HEAD, OPTIONS, TRACE",
-          },
-        }
-      )
+      .post("http://localhost:3250/multiplicacion", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
-        setResult(response.data);
-        setResultMultiplicacion(getMultiplyResult(response.data))
+        setResult(response.data.resultado);
+        setResultMultiplicacion(response.data.resultado);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   };
   const division = () => {
     const primerNumero = document.getElementById("primerNumeroDivision").value;
-    const segundoNumero = document.getElementById("segundoNumeroDivision").value;
+    const segundoNumero = document.getElementById("segundoNumeroDivision")
+      .value;
 
-    const xmlData = `
-      <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-        <soap:Body>
-          <Divide xmlns="http://abaco.org/">
-            <a>${primerNumero}</a>
-            <b>${segundoNumero}</b>
-          </Divide>
-        </soap:Body>
-      </soap:Envelope>
-      `;
-
-    axios
-      .post(
-        "https://calculator20230403202631.azurewebsites.net/abacoService.asmx?",
-        xmlData,
-        {
-          headers: {
-            "Content-Type": "text/xml",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-            Allow: "GET, HEAD, OPTIONS, TRACE",
-          },
-        }
-      )
-      .then(function(response) {
-        console.log(response);
-        console.log(response.data);
-        setResult(response.data);
-        setResultDivision(getDivideResult(response.data))
-      });
+      const bodyData = {
+        numero1: parseInt(primerNumero),
+        numero2: parseInt(segundoNumero),
+      };
+  
+      axios
+        .post("http://localhost:3250/division", bodyData)
+        .then(function(response) {
+          console.log(response);
+          console.log(response.data);
+          setResult(response.data.resultado);
+          setResultDivision(response.data.resultado);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    
   };
   return (
     <Container>
@@ -190,17 +116,17 @@ function App() {
         <Card.Body>
           <Row>
             <Col>
-            {result !== false ? (
-                      <>
-                        <Alert variant="success">
-                          Última consulta:
-                          <br />
-                          {result}
-                        </Alert>
-                      </>
-                    ) : (
-                      <></>
-                    )}
+              {result !== false ? (
+                <>
+                  <Alert variant="success">
+                    Última consulta:
+                    <br />
+                    {result}
+                  </Alert>
+                </>
+              ) : (
+                <></>
+              )}
               <Accordion>
                 <Accordion.Item eventKey="0">
                   <Accordion.Header>Suma</Accordion.Header>
@@ -233,7 +159,7 @@ function App() {
                     </Form>
                     {resultSuma !== false ? (
                       <>
-                      <br />
+                        <br />
                         <Alert variant="success">
                           El resultado es {resultSuma}
                         </Alert>
@@ -274,7 +200,7 @@ function App() {
                     </Form>
                     {resultResta !== false ? (
                       <>
-                      <br />
+                        <br />
                         <Alert variant="success">
                           El resultado es {resultResta}
                         </Alert>
@@ -309,13 +235,16 @@ function App() {
                         />
                       </Form.Group>
 
-                      <Button onClick={() => multiplicacion()} variant="primary">
+                      <Button
+                        onClick={() => multiplicacion()}
+                        variant="primary"
+                      >
                         Calcular
                       </Button>
                     </Form>
                     {resultMultiplicacion !== false ? (
                       <>
-                      <br />
+                        <br />
                         <Alert variant="success">
                           El resultado es {resultMultiplicacion}
                         </Alert>
@@ -356,7 +285,7 @@ function App() {
                     </Form>
                     {resultDivision !== false ? (
                       <>
-                      <br />
+                        <br />
                         <Alert variant="success">
                           El resultado es {resultDivision}
                         </Alert>
