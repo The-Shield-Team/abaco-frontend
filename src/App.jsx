@@ -28,7 +28,7 @@ function App() {
     };
 
     axios
-      .post("http://localhost:3250/suma", bodyData)
+      .post("http://20.121.116.27/calc/suma", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
@@ -50,7 +50,7 @@ function App() {
     };
 
     axios
-      .post("http://localhost:3250/resta", bodyData)
+      .post("http://20.121.116.27/calc/resta", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
@@ -74,7 +74,7 @@ function App() {
     };
 
     axios
-      .post("http://localhost:3250/multiplicacion", bodyData)
+      .post("http://20.121.116.27/calc/multiplicacion", bodyData)
       .then(function(response) {
         console.log(response);
         console.log(response.data);
@@ -96,7 +96,7 @@ function App() {
       };
   
       axios
-        .post("http://localhost:3250/division", bodyData)
+        .post("http://20.121.116.27/calc/division", bodyData)
         .then(function(response) {
           console.log(response);
           console.log(response.data);
