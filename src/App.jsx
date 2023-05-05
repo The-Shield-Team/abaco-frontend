@@ -54,7 +54,7 @@ function App() {
         headers: {
           'content-type': 'application/json',
           'mode': 'no-cors'
-      })
+      }})
       .then(function(response) {
         console.log(response);
         console.log(response.data);
