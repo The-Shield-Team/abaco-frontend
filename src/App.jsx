@@ -50,7 +50,11 @@ function App() {
     };
 
     axios
-      .post("http://20.121.116.27/calc/resta", bodyData)
+      .post("http://20.121.116.27/calc/resta", bodyData, {
+        headers: {
+          'content-type': 'application/json',
+          'mode': 'no-cors'
+      })
       .then(function(response) {
         console.log(response);
         console.log(response.data);
